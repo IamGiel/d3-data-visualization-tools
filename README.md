@@ -1,6 +1,11 @@
-# NgD3GraphEditor
+# D3 in Angular 7
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
+
+## Motif
+
+Integrate `D3js data viz tools` in `ang 7` Exploring different capabilities displaying different types of data in order to be able to grasp its capabilties over `anycharts.js`.
+
 
 ## Development server
 
