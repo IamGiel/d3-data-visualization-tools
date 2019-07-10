@@ -133,13 +133,13 @@ export class AppComponent {
                     })
                     .on("mousemove", function(event){
                       event = window.event || event; 
-                      console.log(` X: ${d3.mouse(this)[0] + 618} and  Y: ${d3.mouse(this)[1] + 178}`)
-                      console.log(`clientX: ${event.clientX}px and ClientY: ${event.clientY}px`)
+                      console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
+                      console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
-                        .style("left", (d3.mouse(this)[0]) + "px")
-                        .style("top",(d3.mouse(this)[1]) + "px")
+                        .style("left", (d3.mouse(this)[0]-200) + "px")
+                        .style("top",(d3.mouse(this)[1]-20) + "px")
                     })
                     .on('mouseout', function() {
                       // console.log("tooltip mouse out")
