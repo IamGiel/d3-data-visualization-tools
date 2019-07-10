@@ -100,7 +100,7 @@ export class AppComponent {
                 .append("div")
                   .style("position", "relative")
                   .style("visibility", "visible")
-                  .text("show tooltip here")
+                  // .text("show tooltip here")
                  
                 rect
                     .attr('width', x.bandwidth)
@@ -120,11 +120,10 @@ export class AppComponent {
                     .on('mouseover', function(d, i, n) {
                       d3.select(this)
                       .attr('opacity', 0.5)
-                      // .attr('class', 'd3-tip')
-                      // console.log("tooltip called over")
                       let event:any = window.event;
                       let showName = d.name;
                       let showAge = d.orders;
+                      console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
@@ -134,12 +133,13 @@ export class AppComponent {
                     })
                     .on("mousemove", function(event){
                       event = window.event || event; 
-                      // console.log(`tooltip mouse move clientX: ${event.clientX}px  ClientY: ${event.clientY}px`)
+                      console.log(` X: ${d3.mouse(this)[0] + 618} and  Y: ${d3.mouse(this)[1] + 178}`)
+                      console.log(`clientX: ${event.clientX}px and ClientY: ${event.clientY}px`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
-                        .style("top", `${event.clientX}px!important`)
-                        .style("left",`${event.clientY}px!important`)
+                        .style("left", (d3.mouse(this)[0]) + "px")
+                        .style("top",(d3.mouse(this)[1]) + "px")
                     })
                     .on('mouseout', function() {
                       // console.log("tooltip mouse out")
