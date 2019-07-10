@@ -40,6 +40,12 @@ export class AppComponent {
             // select svg container
             const svg = d3.select('#graphContainer');
 
+            // these values will help us to not hard code min and max for domain and ranges
+            const min = d3.min(this.CustomerData, d=> d.orders)
+            const max = d3.max(this.CustomerData, d=> d.orders)
+            const extent = d3.extent(this.CustomerData, d => d.orders )
+            console.log(min, max, extent)
+
             const margin = { top: 20, right: 20, bottom: 100, left: 100 };
             const graphWidth = 600 - margin.left - margin.right;
             const graphHeight = 600 - margin.top - margin.bottom;
@@ -49,14 +55,6 @@ export class AppComponent {
                 .attr('width', graphWidth)
                 .attr('height', graphHeight)
                 .attr('transform', `translate( ${margin.left}, ${margin.right})`)
-
-            // create a tooltip
-            const tooltip = d3.select("#my_dataviz")
-            .append("div")
-              .style("position", "relative")
-              .style("visibility", "hidden")
-              .text("show tooltip here")
-              
 
             const xAxisGroup = graph.append('g').attr('transform', `translate(0, ${graphHeight})`);
             const yAxisGroup = graph.append('g');
@@ -74,7 +72,7 @@ export class AppComponent {
 
             const xAxis = d3.axisBottom(x);
             const yAxis = d3
-                .axisLeft(y)
+                .axisLeft(y) // tick labels on y 
                 .ticks(10)
                 .tickFormat(d => d + ' orders');
             console.log(xAxis, yAxis);
@@ -96,6 +94,13 @@ export class AppComponent {
                 
                  // remove entries when data is updated
                  rect.exit().remove();
+
+                  // create a tooltip
+                const tooltip = d3.select("#my_dataviz")
+                .append("div")
+                  .style("position", "relative")
+                  .style("visibility", "visible")
+                  .text("show tooltip here")
                  
                 rect
                     .attr('width', x.bandwidth)
@@ -116,23 +121,28 @@ export class AppComponent {
                       d3.select(this)
                       .attr('opacity', 0.5)
                       // .attr('class', 'd3-tip')
-                      console.log("tooltip called over")
+                      // console.log("tooltip called over")
                       let event:any = window.event;
-                      console.log(event)
                       let showName = d.name;
                       let showAge = d.orders;
                       return tooltip
-                      .style("visibility", "visible")
-                      .style("top", event.clientX).style("left",event.clientY)
+                        .style("visibility", "visible")
+                        .style("position", "absolute!important")
+                        .style("top", `${event.clientX}px!important`)
+                        .style("left",`${event.clientY}px!important`)
                       .text(`${showName}, Orders: ${showAge}`);
                     })
                     .on("mousemove", function(event){
                       event = window.event || event; 
-                      console.log("tooltip mouse move ", event.clientX + ", " + event.clientY)
-                      return tooltip.style("top", event.clientX).style("left",event.clientY)
+                      // console.log(`tooltip mouse move clientX: ${event.clientX}px  ClientY: ${event.clientY}px`)
+                      return tooltip
+                        .style("visibility", "visible")
+                        .style("position", "absolute!important")
+                        .style("top", `${event.clientX}px!important`)
+                        .style("left",`${event.clientY}px!important`)
                     })
                     .on('mouseout', function() {
-                      console.log("tooltip mouse out")
+                      // console.log("tooltip mouse out")
                       d3.select(this).attr('opacity', 1).attr('class', '')
                       return tooltip.style("visibility", "hidden");
                       
