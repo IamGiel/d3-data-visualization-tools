@@ -227,6 +227,13 @@ export class AppComponent {
                 // remove entries when data is updated
                 rect.exit().remove();
 
+                 // create a tooltip
+                 const tooltip = d3.select("#my_dataviz")
+                 .append("div")
+                   .style("position", "relative")
+                   .style("visibility", "visible")
+                   // .text("show tooltip here")
+
                 rect
                     .attr('height', y.bandwidth)
                     .attr('width', 0)
@@ -245,9 +252,39 @@ export class AppComponent {
                     }).on('mouseout', function() {
                       d3.select(this).attr('opacity', 1)
                     })
+                    .on('mouseover', function(d, i, n) {
+                      d3.select(this)
+                      .attr('opacity', 0.5)
+                      let event:any = window.event;
+                      let showName = d.name;
+                      let showAge = d.age;
+                      console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
+                      return tooltip
+                        .style("visibility", "visible")
+                        .style("position", "absolute!important")
+                        .style("top", `${event.clientX}px!important`)
+                        .style("left",`${event.clientY}px!important`)
+                      .text(`${showName}, ${showAge}`);
+                    })
+                    .on("mousemove", function(event){
+                      event = window.event || event; 
+                      console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
+                      console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
+                      return tooltip
+                        .style("visibility", "visible")
+                        .style("position", "absolute!important")
+                        .style("left", (d3.mouse(this)[0]-200) + "px")
+                        .style("top",(d3.mouse(this)[1]+690) + "px")
+                    })
+                    .on('mouseout', function() {
+                      // console.log("tooltip mouse out")
+                      d3.select(this).attr('opacity', 1).attr('class', '')
+                      return tooltip.style("visibility", "hidden");
+                    })
                     .transition(t)
                     .attr('width', d => x(d.age))
                     .attr('x', 0)
+                    
 
                 // call set axes and tick labels
                 xAxisGroup2.call(xAxis)
