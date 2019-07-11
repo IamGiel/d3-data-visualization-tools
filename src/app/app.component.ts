@@ -47,7 +47,7 @@ export class AppComponent {
             console.log(min, max, extent)
 
             const margin = { top: 20, right: 20, bottom: 100, left: 100 };
-            const graphWidth = 600 - margin.left - margin.right;
+            const graphWidth = 400 - margin.left - margin.right;
             const graphHeight = 600 - margin.top - margin.bottom;
 
             const graph = svg
@@ -123,7 +123,7 @@ export class AppComponent {
                       let event:any = window.event;
                       let showName = d.name;
                       let showAge = d.orders;
-                      console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
+                      // console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
@@ -133,8 +133,8 @@ export class AppComponent {
                     })
                     .on("mousemove", function(event){
                       event = window.event || event; 
-                      console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
-                      console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
+                      // console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
+                      // console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
@@ -171,7 +171,7 @@ export class AppComponent {
                 return { ...e.payload.doc.data() };
             });
 
-            console.log(xdata);
+            // console.log(xdata);
             this.HealthData = xdata;
 
             // select svg container
@@ -185,7 +185,7 @@ export class AppComponent {
             const min = d3.min(this.HealthData, d=> d.age)
             const max = d3.max(this.HealthData, d=> d.age)
             const extent = d3.extent(this.HealthData, d => d.age )
-            console.log(min, max, extent)
+            // console.log(min, max, extent)
 
             const graph2 = svg2
                 .append('g')
@@ -201,8 +201,7 @@ export class AppComponent {
               .range([0, 500])
               .paddingInner(0.2)
               .paddingOuter(10)
-
-             
+              
             const x = d3.scaleLinear()
               .domain([0, max])
               .range([0, graphWidth])
@@ -233,13 +232,11 @@ export class AppComponent {
                    .style("position", "relative")
                    .style("visibility", "visible")
                    // .text("show tooltip here")
-
                 rect
                     .attr('height', y.bandwidth)
                     .attr('width', 0)
                     .attr('fill', `${purple}`)
                     .attr('y', (d) => y(d.name) )
-
                 rect
                     .enter()
                     .append('rect')
@@ -258,7 +255,7 @@ export class AppComponent {
                       let event:any = window.event;
                       let showName = d.name;
                       let showAge = d.age;
-                      console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
+                      // console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
@@ -268,8 +265,8 @@ export class AppComponent {
                     })
                     .on("mousemove", function(event){
                       event = window.event || event; 
-                      console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
-                      console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
+                      // console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
+                      // console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
                       return tooltip
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
@@ -284,7 +281,6 @@ export class AppComponent {
                     .transition(t)
                     .attr('width', d => x(d.age))
                     .attr('x', 0)
-                    
 
                 // call set axes and tick labels
                 xAxisGroup2.call(xAxis)
