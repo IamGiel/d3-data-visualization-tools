@@ -293,16 +293,18 @@ export class AppComponent {
         });
 
         // ========== service fetch another data for HORIZONTAL bar chart =============
-        this.mapService.getCutomerStat().subscribe(data => {
-          let xdata = data.map(e => {
-              return { ...e.payload.doc.data() };
-          });
+        // this.mapService.getCutomerStat().subscribe(data => {
+          // let xdata = data.map(e => {
+          //     return { ...e.payload.doc.data() };
+          // });
 
           // console.log(xdata);
-          // this.HealthData = xdata;
           d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
-            this.HealthData = data;
-          }) 
+            console.log(data)
+            this.CustomerData = data;
+          
+          // this.HealthData = xdata;
+          
 
 
           // select svg container
@@ -328,8 +330,8 @@ export class AppComponent {
                 .attr('transform', `translate( ${margin.left}, ${margin.top})`);
 
                 // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-                const xAxes = d3.map(this.CustomerData, function(d){return d.priority;}).keys()
-                const yAxes = d3.map(this.CustomerData, function(d){return d.name;}).keys()
+                const xAxes = d3.map(this.CustomerData, function(d){return d.group;}).keys()
+                const yAxes = d3.map(this.CustomerData, function(d){return d.variable;}).keys()
 
                 // Build X scales and axis:
                 const x = d3.scaleBand()
@@ -355,8 +357,8 @@ export class AppComponent {
 
                 // Build color scale
                 const myColor = d3.scaleLinear<string>()
-                  .domain([50, 1000])
-                  .range(["red", "green"]);
+                  .domain([1, 10])
+                  .range(["maroon", "purple"]);
 
                 // select tool tip div
                 const hmToolTip = d3.select("#heatmap-tooltip")
@@ -380,7 +382,7 @@ export class AppComponent {
                 }
                 const mousemove = function(d) {
                   hmToolTip
-                    .html(`${d.name} has ${d.orders} orders with priority level: ${d.priority}`)
+                    .html(`${d.variable} has ${d.value} orders with priority level: ${d.group}`)
                     .style("left", (d3.mouse(this)[0]-200) + "px")
                     .style("top", (d3.mouse(this)[1]+40) + "px")
                     .style("color", "white")
@@ -395,16 +397,16 @@ export class AppComponent {
 
                 // add the squares
                 svg.selectAll()
-                .data(this.CustomerData, function(d) {return d.name+':'+d.orders;})
+                .data(this.CustomerData, function(d) {return d.group+':'+d.variable;})
                 .enter()
                 .append("rect")
-                  .attr("x", function(d) { return x(d.priority) }) // allows to spread the square diagonally across the chart
-                  .attr("y", function(d) { return y(d.name) }) // allows to spread the square diagonally across the chart
+                  .attr("x", function(d) { return x(d.group) }) // allows to spread the square diagonally across the chart
+                  .attr("y", function(d) { return y(d.variable) }) // allows to spread the square diagonally across the chart
                   .attr("rx", 4)
                   .attr("ry", 4)
                   .attr("width", x.bandwidth() )
                   .attr("height", y.bandwidth() )
-                  .style("fill", function(d) { return myColor(d.orders)} )
+                  .style("fill", function(d) { return myColor(d.value)} ) // scale color here defined above
                   .style("stroke-width", 4)
                   .style("stroke", "none")
                   .style("opacity", 0.8)
@@ -413,6 +415,8 @@ export class AppComponent {
                 .on("mouseleave", mouseleave)
             
           })
+
+        // }) 
 
     }
 
