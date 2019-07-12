@@ -21,6 +21,18 @@ export const environment = {
   }
 };
 
+export const environment2 = {
+  production: false,
+  firebase: {
+      apiKey: 'AIzaSyDDKS2dXyEkDkmoxT9y8Wvhef1Cvq4GrDQ',
+      authDomain: 'beroedataproject.firebaseapp.com',
+      databaseURL: 'https://beroedataproject.firebaseio.com',
+      projectId: 'beroedataproject',
+      storageBucket: 'beroedataproject.appspot.com',
+      messagingSenderId: '420101972062',
+      appId: '1:71764976908:web:5fd5d858121a4731'
+  }
+};
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

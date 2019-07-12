@@ -7,7 +7,7 @@ import { D3TooltipModule, D3TooltipService } from 'ngx-d3-tooltip';
 
 
 import { AppComponent } from './app.component';
-import { environment } from 'src/environments/environment';
+import { environment, environment2 } from 'src/environments/environment';
 import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-component.component';
 
 @NgModule({
@@ -18,7 +18,7 @@ import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-c
   imports: [
     BrowserModule,
     D3TooltipModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment.firebase, environment2.firebase),
     AngularFirestoreModule,
   ],
   providers: [D3TooltipService],
