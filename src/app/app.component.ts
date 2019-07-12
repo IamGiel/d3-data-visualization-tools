@@ -300,7 +300,9 @@ export class AppComponent {
 
           // console.log(xdata);
           // this.HealthData = xdata;
-          this.HealthData = d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
+          d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
+            this.HealthData = data;
+          }) 
 
 
           // select svg container
