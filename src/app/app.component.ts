@@ -299,7 +299,9 @@ export class AppComponent {
           });
 
           // console.log(xdata);
-          this.HealthData = xdata;
+          // this.HealthData = xdata;
+          this.HealthData = d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv", function(data) {
+
 
           // select svg container
           const svg2 = d3.select('#graphContainer2');
