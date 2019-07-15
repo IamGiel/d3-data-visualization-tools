@@ -306,7 +306,7 @@ export class AppComponent {
                 const xAxes = d3.map(this.CustomerData, function(d){return d["Year"]}).keys()
                 console.log(xAxes)
 
-          const margin = { top: 100, right: 100, bottom: 20, left: 200 };
+          const margin = { top: 180, right: 100, bottom: 20, left: 200 };
           const graphWidth = yAxes.length*100 + margin.left + margin.right;
           const graphHeight = xAxes.length*10000 - margin.top - margin.bottom;
 
@@ -315,13 +315,23 @@ export class AppComponent {
             .append("svg")
             .attr("width", graphWidth)
             .attr("height", graphHeight)
+            // .attr("margin-top", 600)
             .append("g")
             .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
+                  "translate(" + margin.left + "," + margin.top  + ")");
+
+          // LEGEND
+          // select the svg area
+          // const legendSvg = d3.select("#legend")
+          // Handmade legend
+          graph.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#4BA15E").attr("transform", "translate(0,-220)")
+          graph.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#A7CDD9").attr("transform", "translate(0,-220)")
+          graph.append("text").attr("x", 220).attr("y", 130).text("Towards 100: Longer Life Expectency").style("font-size", "15px").attr("alignment-baseline","middle").attr("transform", "translate(0,-220)")
+          graph.append("text").attr("x", 220).attr("y", 160).text("N/A or Shorter Life Expectency").style("font-size", "15px").attr("alignment-baseline","middle").attr("transform", "translate(0,-220)")
 
           // Build X scales and axis:
           const x = d3.scaleBand()
-            .range([ 0, 1000 ])
+            .range([ 0, 750 ])
             .domain(xAxes)
             .padding(0.05);
             
@@ -332,7 +342,7 @@ export class AppComponent {
 
           // Build Y scales and axis:
           const y = d3.scaleBand()
-            .range([ 0, 5000 ])
+            .range([ 0, 3000 ])
             .domain(yAxes)
             .padding(0.05);
             
@@ -342,11 +352,13 @@ export class AppComponent {
             .call(d3.axisLeft(y).tickSize(12))
 
           // Build color scale
-          const myColor = d3.scaleLinear<string>()
-            .domain(d3.extent(this.CustomerData, d => d["Life Expectancy Male"])).nice()
-            .range(["red","white"])
-            // .domain([1, 40]) // specify the range of the scale typically align this close to the data sets
-            // .range(["#6A4DD8", "#EFEDFC"]);
+
+          // let grey = () =>  {
+          //   if()
+          // }
+          const myColor = d3.scaleLinear<any>()
+          .range(["#A5CAD6", "green"])
+          .domain([0, 100])
         
 
           // select tool tip div
@@ -365,10 +377,13 @@ export class AppComponent {
               .style("opacity", 1)
           }
           const mousemove = function(d) {
+            let yearString = `${d["Year"]}`;
+            let life = d["Life Expectancy Male"] ? d["Life Expectancy Male"] : "n/a";
+            console.log(yearString.substring(5))
             hmToolTip
-              .html(`Country: ${d["Country"]}, Life Expectancy: ${d["Year"]} Age: ${d["Life Expectancy Male"]}`)
-              .style("left", (d3.mouse(this)[0]-500) + "px")
-              .style("top", (d3.mouse(this)[1]+40) + "px")
+              .html(`Male Life Expectancy: ${life} Year: ${yearString.substring(5)}`)
+              .style("left", (d3.mouse(this)[0]-400) + "px")
+              .style("top", (d3.mouse(this)[1]+120) + "px")
               .style("color", "white")
           }
           const mouseleave = function(d) {
@@ -390,7 +405,7 @@ export class AppComponent {
             .attr("ry", 4)
             .attr("width", x.bandwidth() )
             .attr("height", y.bandwidth() )
-            .style("fill", function(d) { return myColor(d.value)} ) // scale color here defined above
+            .style("fill", function(d) { return myColor(d["Life Expectancy Male"])} ) // scale color here defined above
             .style("stroke-width", 4)
             .style("stroke", "none")
             .style("opacity", 0.8)
