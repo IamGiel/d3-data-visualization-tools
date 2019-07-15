@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, ComponentFactoryResolver } from '@angular/core';
 import * as d3 from 'd3';
+import "../"
 
 import { FirebaseService } from './service/firebase.service';
 import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-component.component';
@@ -164,133 +165,6 @@ export class AppComponent {
             update1stGraph(this.CustomerData);
         });
 
-        // ==========@@@@@@@@@@ service fetch another data for HORIZONTAL bar chart @@@@@@@@@@@@=============
-        this.mapService.getCutomerStat().subscribe(data => {
-            let xdata = data.map(e => {
-                return { ...e.payload.doc.data() };
-            });
-
-            // console.log(xdata);
-            this.HealthData = xdata;
-
-            // select svg container
-            const svg2 = d3.select('#graphContainer2');
-
-            const margin = { top: 100, right: 100, bottom: 20, left: 100 };
-            const graphWidth = 600 - margin.left - margin.right;
-            const graphHeight = 600 - margin.top - margin.bottom;
-
-            // these values will help us to not hard code min and max for domain and ranges
-            const min = d3.min(this.HealthData, d=> d.age)
-            const max = d3.max(this.HealthData, d=> d.age)
-            const extent = d3.extent(this.HealthData, d => d.age )
-            // console.log(min, max, extent)
-
-            const graph2 = svg2
-                .append('g')
-                .attr('width', graphWidth)
-                .attr('height', graphHeight)
-                .attr('transform', `translate( ${margin.left}, ${margin.top})`);
-            // set the axis labels
-            const xAxisGroup2 = graph2.append('g');
-            const yAxisGroup2 = graph2.append('g');
-            // labels the y axis
-            const y = d3.scaleBand()
-              .domain(this.HealthData.map(d => d.name))
-              .range([0, 500])
-              .paddingInner(0.2)
-              .paddingOuter(10)
-
-            // label the x axis 
-            const x = d3.scaleLinear()
-              .domain([0, max])
-              .range([0, graphWidth])
-
-            const yAxis = d3.axisLeft(y)
-            const xAxis = d3.axisTop(x)
-              .tickFormat((d) => 'age: ' + d)
-            // console.log(xAxis, yAxis);
-
-            // define transition
-            const t = d3.transition().duration(500);
-
-            // =========== update data ===========
-            const update2ndGraph = purple => {
-                purple = '#6B4CD8'
-                // join data
-                const rect = graph2.selectAll('rect').data(this.HealthData);
-                // remove entries when data is updated
-                rect.exit().remove();
-
-                 // create a tooltip
-                 const tooltip = d3.select("#my_dataviz")
-                 .append("div")
-                   .style("position", "relative")
-                   .style("visibility", "visible")
-                   // .text("show tooltip here")
-                rect
-                    .attr('height', y.bandwidth)
-                    .attr('width', 0)
-                    .attr('fill', `${purple}`)
-                    .attr('y', (d) => y(d.name) )
-                rect
-                    .enter()
-                    .append('rect')
-                    .attr('height', y.bandwidth)
-                    .attr('width', 0)
-                    .attr('fill', `${purple}`)
-                    .attr('y', (d) => y(d.name) )
-                    .on('mouseover', function() {
-                      d3.select(this).attr('opacity', 0.5)
-                    }).on('mouseout', function() {
-                      d3.select(this).attr('opacity', 1)
-                    })
-                    .on('mouseover', function(d, i, n) {
-                      d3.select(this)
-                      .attr('opacity', 0.5)
-                      let event:any = window.event;
-                      let showName = d.name;
-                      let showAge = d.age;
-                      // console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
-                      return tooltip
-                        .style("visibility", "visible")
-                        .style("position", "absolute!important")
-                        .style("top", `${event.clientX}px!important`)
-                        .style("left",`${event.clientY}px!important`)
-                      .text(`${showName}, ${showAge}`);
-                    })
-                    .on("mousemove", function(event){
-                      event = window.event || event; 
-                      // console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
-                      // console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
-                      return tooltip
-                        .style("visibility", "visible")
-                        .style("position", "absolute!important")
-                        .style("left", (d3.mouse(this)[0]-200) + "px")
-                        .style("top",(d3.mouse(this)[1]+690) + "px")
-                    })
-                    .on('mouseout', function() {
-                      // console.log("tooltip mouse out")
-                      d3.select(this).attr('opacity', 1).attr('class', '')
-                      return tooltip.style("visibility", "hidden");
-                    })
-                    .transition(t)
-                    .attr('width', d => x(d.age))
-                    .attr('x', 0)
-
-                // call set axes and tick labels
-                xAxisGroup2.call(xAxis)
-                yAxisGroup2.call(yAxis);
-
-                xAxisGroup2
-                    .selectAll('text')
-                    .attr('transform', 'rotate(-35)')
-                    .attr('text-anchor', 'start');
-            };
-           
-            update2ndGraph(this.HealthData);
-        });
-
         // ==========@@@@@@@@@@ service fetch another data for HEAT MAP chart @@@@@@@@@@@@=============
         // this.mapService.getCutomerStat().subscribe(data => {
           // let xdata = data.map(e => {
@@ -298,7 +172,7 @@ export class AppComponent {
           // });
           // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
           d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data)=>{ 
-            console.log(data)
+            // console.log(data)
             this.CustomerData = data;
 
                 // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
@@ -414,9 +288,53 @@ export class AppComponent {
           .on("mouseleave", mouseleave)
             
           })
+          // ==========@@@@@@@@@@ service fetch another data for HEXBIN MAP chart @@@@@@@@@@@@=============
 
-        // }) 
+          d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data)=>{ 
+                  console.log(data)
+                  this.CustomerData = data;
+                // set the dimensions and margins of the graph
+                const margin = {top: 10, right: 30, bottom: 30, left: 40};
+                const width = 460 - margin.left - margin.right;
+                const height = 400 - margin.top - margin.bottom;
 
+                // append the svg object to the body of the page
+                const svg = d3.select("#hexbin")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
+                // Add X axis
+                const x = d3.scaleLinear()
+                  .domain([5, 18])
+                  .range([ 0, width ]);
+                svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(d3.axisBottom(x)); 
+                // Add Y axis
+              const y = d3.scaleLinear()
+              .domain([5, 20])
+              .range([ height, 0 ]);
+              svg.append("g")
+                .call(d3.axisLeft(y));
+            // Reformat the data: d3.hexbin() needs a specific format
+            const inputForHexbinFun = []
+            this.CustomerData.forEach(function(d) {
+              inputForHexbinFun.push( [x(d.x), y(d.y)] )  // Note that we had the transform value of X and Y !
+            })
+            // Prepare a color palette
+            const color = d3.scaleLinear<any>()
+            .domain([0, 600]) // Number of points in the bin?
+            .range(["transparent",  "#69b3a2"])
+
+            // Compute the hexbin data
+            const hexbin = d3.h ()
+            .radius(11) // size of the bin in px
+            .extent([ [0, 0], [width, height] ])
+          })
     }
 
     handleMouseEventsOn = (d, i, n) => {
