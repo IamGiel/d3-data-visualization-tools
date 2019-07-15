@@ -296,117 +296,107 @@ export class AppComponent {
           // let xdata = data.map(e => {
           //     return { ...e.payload.doc.data() };
           // });
-          d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
+          // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
+          d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data)=>{ 
             console.log(data)
             this.CustomerData = data;
-          // select svg container
-          const svg2 = d3.select('#graphContainer2');
 
-          const margin = { top: 100, right: 100, bottom: 20, left: 100 };
-          const graphWidth = 800 + margin.left + margin.right;
-          const graphHeight = 1000 - margin.top - margin.bottom;
+                // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
+                const yAxes = d3.map(this.CustomerData, function(d){return d["Country"];}).keys()
+                const xAxes = d3.map(this.CustomerData, function(d){return d["Year"]}).keys()
+                console.log(xAxes)
+
+          const margin = { top: 100, right: 100, bottom: 20, left: 200 };
+          const graphWidth = yAxes.length*100 + margin.left + margin.right;
+          const graphHeight = xAxes.length*10000 - margin.top - margin.bottom;
 
           // append the svg object to the body of the page
-          const svg = d3.select("#heat-map")
-          .append("svg")
+          const graph = d3.select("#heat-map")
+            .append("svg")
             .attr("width", graphWidth)
-            .attr("height", graphWidth)
-          .append("g")
+            .attr("height", graphHeight)
+            .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-                // const graph3 = svg2
-                // .append('g')
-                // .attr('width', graphWidth)
-                // .attr('height', graphHeight)
-                // .attr('transform', `translate( ${margin.left}, ${margin.top})`);
+          // Build X scales and axis:
+          const x = d3.scaleBand()
+            .range([ 0, 1000 ])
+            .domain(xAxes)
+            .padding(0.05);
+            
+          graph.append("g")
+            .style("font-size", 20)
+            .attr("transform", "translate(0," + 0 + ")")
+            .call(d3.axisTop(x).tickSize(12).tickFormat((d) => `${d}`))
 
-                // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-                const xAxes = d3.map(this.CustomerData, function(d){return d.group;}).keys()
-                const yAxes = d3.map(this.CustomerData, function(d){return d.variable;}).keys()
+          // Build Y scales and axis:
+          const y = d3.scaleBand()
+            .range([ 0, 5000 ])
+            .domain(yAxes)
+            .padding(0.05);
+            
+          graph.append("g")
+            .style("font-size", 15)
+            .attr("transform", "translate(0," + 0 + ")")
+            .call(d3.axisLeft(y).tickSize(12))
 
-                // Build X scales and axis:
-                const x = d3.scaleBand()
-                  .range([ 0, graphWidth ])
-                  .domain(xAxes)
-                  .padding(0.05);
-                svg.append("g")
-                  .style("font-size", 20)
-                  .attr("transform", "translate(0," + graphHeight + ")")
-                  .call(d3.axisBottom(x).tickSize(0))
-                  // .select(".domain").remove()
+          // Build color scale
+          const myColor = d3.scaleLinear<string>()
+            .domain(d3.extent(this.CustomerData, d => d["Life Expectancy Male"])).nice()
+            .range(["red","white"])
+            // .domain([1, 40]) // specify the range of the scale typically align this close to the data sets
+            // .range(["#6A4DD8", "#EFEDFC"]);
+        
 
-                // Build Y scales and axis:
-                const y = d3.scaleBand()
-                  .range([ graphHeight, 0 ])
-                  .domain(yAxes)
-                  .padding(0.05);
-                svg.append("g")
-                  .style("font-size", 15)
-                  // .attr("transform", "translate(0," + graphHeight + ")")
-                  .call(d3.axisLeft(y).tickSize(0))
-                  // .select(".domain").remove()
+          // select tool tip div
+          const hmToolTip = d3.select("#heatmap-tooltip")
+            .style("opacity", 0)
+            .style("position", "relative")
+            .attr("class", "tooltip")
+            .style("padding", "5px")
 
-                // Build color scale
-                const myColor = d3.scaleLinear<string>()
-                  // .domain([1, 40]) // specify the range of the scale typically align this close to the data sets
-                  // .range(["#6A4DD8", "#EFEDFC"]);
-                  .range(["white", "#69b3a2"])
-                  .domain([1,100])
+          // Three function that change the tooltip when user hover / move / leave a cell
+          const mouseover = function(d) {
+            hmToolTip
+              .style("opacity", 1)
+            d3.select(this)
+              .style("stroke", "yellow")
+              .style("opacity", 1)
+          }
+          const mousemove = function(d) {
+            hmToolTip
+              .html(`Country: ${d["Country"]}, Life Expectancy: ${d["Year"]} Age: ${d["Life Expectancy Male"]}`)
+              .style("left", (d3.mouse(this)[0]-500) + "px")
+              .style("top", (d3.mouse(this)[1]+40) + "px")
+              .style("color", "white")
+          }
+          const mouseleave = function(d) {
+            hmToolTip
+              .style("opacity", 0)
+            d3.select(this)
+              .style("stroke", "none")
+              .style("opacity", 0.8)
+          }
 
-                // select tool tip div
-                const hmToolTip = d3.select("#heatmap-tooltip")
-                  // .append("div")
-                  .style("opacity", 0)
-                  .style("position", "relative")
-                  .attr("class", "tooltip")
-                  // .style("background-color", "white")
-                  // .style("border", "solid")
-                  // .style("border-width", "2px")
-                  // .style("border-radius", "5px")
-                  .style("padding", "5px")
-
-                // Three function that change the tooltip when user hover / move / leave a cell
-                const mouseover = function(d) {
-                  hmToolTip
-                    .style("opacity", 1)
-                  d3.select(this)
-                    .style("stroke", "yellow")
-                    .style("opacity", 1)
-                }
-                const mousemove = function(d) {
-                  hmToolTip
-                    .html(`Company: ${d.group}, Risk Level: ${d.value} in Release: ${d.variable}`)
-                    .style("left", (d3.mouse(this)[0]-500) + "px")
-                    .style("top", (d3.mouse(this)[1]+40) + "px")
-                    .style("color", "#6A4DD9")
-                }
-                const mouseleave = function(d) {
-                  hmToolTip
-                    .style("opacity", 0)
-                  d3.select(this)
-                    .style("stroke", "none")
-                    .style("opacity", 0.8)
-                }
-
-                // add the squares
-                svg.selectAll()
-                .data(this.CustomerData, function(d) {return d.group+':'+d.variable;})
-                .enter()
-                .append("rect")
-                  .attr("x", function(d) { return x(d.group) }) // allows to spread the square diagonally across the chart
-                  .attr("y", function(d) { return y(d.variable) }) // allows to spread the square diagonally across the chart
-                  .attr("rx", 4)
-                  .attr("ry", 4)
-                  .attr("width", x.bandwidth() )
-                  .attr("height", y.bandwidth() )
-                  .style("fill", function(d) { return myColor(d.value)} ) // scale color here defined above
-                  .style("stroke-width", 4)
-                  .style("stroke", "none")
-                  .style("opacity", 0.8)
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave)
+          // add the squares
+          graph.selectAll()
+          .data(this.CustomerData, function(d) {return d["Country"]+':'+d["Year"];})
+          .enter()
+          .append("rect")
+            .attr("x", function(d) { return x(d["Year"] ) }) // allows to spread the square diagonally across the chart
+            .attr("y", function(d) { return y(d["Country"])}) // allows to spread the square diagonally across the chart
+            .attr("rx", 4)
+            .attr("ry", 4)
+            .attr("width", x.bandwidth() )
+            .attr("height", y.bandwidth() )
+            .style("fill", function(d) { return myColor(d.value)} ) // scale color here defined above
+            .style("stroke-width", 4)
+            .style("stroke", "none")
+            .style("opacity", 0.8)
+          .on("mouseover", mouseover)
+          .on("mousemove", mousemove)
+          .on("mouseleave", mouseleave)
             
           })
 
