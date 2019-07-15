@@ -303,23 +303,23 @@ export class AppComponent {
           const svg2 = d3.select('#graphContainer2');
 
           const margin = { top: 100, right: 100, bottom: 20, left: 100 };
-          const graphWidth = 600 - margin.left - margin.right;
-          const graphHeight = 600 - margin.top - margin.bottom;
+          const graphWidth = 800 + margin.left + margin.right;
+          const graphHeight = 1000 - margin.top - margin.bottom;
 
           // append the svg object to the body of the page
           const svg = d3.select("#heat-map")
           .append("svg")
-            .attr("width", graphWidth + margin.left + margin.right)
-            .attr("height", graphHeight + margin.top + margin.bottom)
+            .attr("width", graphWidth)
+            .attr("height", graphWidth)
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-                const graph3 = svg2
-                .append('g')
-                .attr('width', graphWidth)
-                .attr('height', graphHeight)
-                .attr('transform', `translate( ${margin.left}, ${margin.top})`);
+                // const graph3 = svg2
+                // .append('g')
+                // .attr('width', graphWidth)
+                // .attr('height', graphHeight)
+                // .attr('transform', `translate( ${margin.left}, ${margin.top})`);
 
                 // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
                 const xAxes = d3.map(this.CustomerData, function(d){return d.group;}).keys()
@@ -331,7 +331,7 @@ export class AppComponent {
                   .domain(xAxes)
                   .padding(0.05);
                 svg.append("g")
-                  .style("font-size", 15)
+                  .style("font-size", 20)
                   .attr("transform", "translate(0," + graphHeight + ")")
                   .call(d3.axisBottom(x).tickSize(0))
                   // .select(".domain").remove()
@@ -377,7 +377,7 @@ export class AppComponent {
                 const mousemove = function(d) {
                   hmToolTip
                     .html(`Company: ${d.group}, Risk Level: ${d.value} in Release: ${d.variable}`)
-                    .style("left", (d3.mouse(this)[0]-200) + "px")
+                    .style("left", (d3.mouse(this)[0]-500) + "px")
                     .style("top", (d3.mouse(this)[1]+40) + "px")
                     .style("color", "#6A4DD9")
                 }
