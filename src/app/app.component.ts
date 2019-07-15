@@ -26,53 +26,53 @@ export class AppComponent {
     ngOnInit() {}
     ngAfterContentInit() {
 
-        this.mapService.getCutomerOrder().subscribe(data => {
-            let xdata = data.map(e => {
-                return { ...e.payload.doc.data() };
-            });
+        // ==========@@@@@@@@@@ service fetch another data for HORIZONTAL bar chart @@@@@@@@@@@@=============
+        // this.mapService.getCutomerOrder().subscribe(data => {
+        //     let xdata = data.map(e => {
+        //         return { ...e.payload.doc.data() };
+        //     });
 
-            console.log(xdata);
-            this.CustomerData = xdata;
+        // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
+          d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data)=>{ 
+            this.CustomerData = data;
+            console.log(this.CustomerData)
 
             // select svg container
-            const svg = d3.select('#graphContainer');
-
-            // these values will help us to not hard code min and max for domain and ranges
-            const min = d3.min(this.CustomerData, d=> d.orders)
-            const max = d3.max(this.CustomerData, d=> d.orders)
-            const extent = d3.extent(this.CustomerData, d => d.orders )
-            console.log(min, max, extent)
-
-            const margin = { top: 20, right: 20, bottom: 100, left: 100 };
-            const graphWidth = 400 - margin.left - margin.right;
-            const graphHeight = 600 - margin.top - margin.bottom;
-
+            // const svg = d3.select('#graphContainer');
+            const svg = d3.select("#LPUgraph").append("svg");
+            //set graph height and width
+            const margin = { top: 100, right: 200, bottom: 100, left: 200 };
+            const graphWidth = margin.right + d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 88) + margin.left;
+            const graphHeight = margin.bottom + d3.max(this.CustomerData, d => d["Country"].length * 250) + margin.top;
+            console.log(graphHeight)
+            // build Graph height and width
             const graph = svg
-                .append('g')
+                
                 .attr('width', graphWidth)
                 .attr('height', graphHeight)
+                .append('g')
                 .attr('transform', `translate( ${margin.left}, ${margin.right})`)
-
-            const xAxisGroup = graph.append('g').attr('transform', `translate(0, ${graphHeight})`);
+            // set the axis labels
+            const xAxisGroup = graph.append('g');
             const yAxisGroup = graph.append('g');
+            // labels the y axis
+            const y = d3.scaleBand()
+              .domain(this.CustomerData.map(d => d["Country"]))
+              .range([0, graphHeight])
+              .paddingInner(0.2)
+              .paddingOuter(0.5)
 
-            // scale the y axis
-            // const y = d3.scaleLinear().range([graphHeight, 0]);
-            const y = d3.scaleLinear().range([graphHeight, 0]);
+              console.log(this.CustomerData.map(d => d["Year"]))
+              console.log(this.CustomerData.map(d => d["Life Expectancy Male"]))
 
-            // scale the x axis
-            const x = d3
-                .scaleBand()
-                .range([0, 500]) // how thick the bar is
-                .paddingInner(0.2)
-                .paddingOuter(0.4);
-
-            const xAxis = d3.axisBottom(x);
+            // label the x axis
+            const x = d3.scaleLinear()
+              .domain([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"])])
+              .range([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 10)]) // going up ascend
+              console.log(d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
+            const xAxis =  d3.axisTop(x).ticks(20).tickFormat((d) => `${d}yrs Life expectancy`)
             const yAxis = d3
-                .axisLeft(y) // tick labels on y 
-                .ticks(10)
-                .tickFormat(d => d + ' orders');
-            console.log(xAxis, yAxis);
+              .axisLeft(y) // tick labels on y 
 
             // define transition
             const t = d3.transition().duration(500);
@@ -81,15 +81,12 @@ export class AppComponent {
             const update1stGraph = orange => {
                 orange = 'orange'
                 // update scales
-                y.domain([0, d3.max(this.CustomerData, d => d.orders)]);
-                x.domain(this.CustomerData.map(item => item.name));
-
-                console.log(y.domain([0, d3.max(this.CustomerData, d => d.orders)]))
-
+                // x.domain([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"])]);
+                // y.domain(this.CustomerData.map(item => item.Country)); // values you want to vertically be projected by each graph
                 // join data
                 const rect = graph.selectAll('rect').data(this.CustomerData)
                 
-                 // remove entries when data is updated
+                 // remove un-needed entries when data is updated
                  rect.exit().remove();
 
                   // create a tooltip
@@ -100,54 +97,55 @@ export class AppComponent {
                   // .text("show tooltip here")
                  
                 rect
-                    .attr('width', x.bandwidth)
-                    .attr('height', 0)
-                    .attr('y', graphHeight)
+                    .attr('height', y.bandwidth)
+                    .attr('width', 0) // starting height of the bar
+                    .attr('y', d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
                     .attr('fill', 'orange')
-                    .attr('x', d => x(d.name))
+                    .attr('y', d => y(d["Country"])) // fills the bar per group
                 rect
                     .enter()
                     .append('rect')
-                    .attr('width', x.bandwidth)
-                    .attr('height', 0)
-                    .attr('y', graphHeight)
+                    .attr('height', y.bandwidth)
+                    .attr('width', 0) // starting height of the bar
+                    .attr('y', d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
                     .attr('fill', 'orange')
-                    .attr('x', d => x(d.name))
+                    .attr('y', d => y(d["Country"]))
                     // .merge(rect)
                     .on('mouseover', function(d, i, n) {
                       d3.select(this)
-                      .attr('opacity', 0.5)
-                      let event:any = window.event;
-                      let showName = d.name;
-                      let showAge = d.orders;
-                      // console.log(`${event.clientX}px!important and ${event.clientY}px!important`)
+                      .attr('fill', "#E9C5A6")
+                      let event:any = window.event; // to get the x and y axis of our cursor
+                      let showValue = d["Life Expectancy Male"];
+                      let showGroup = d["Country"];
+                      console.log(`${showValue} at ${showGroup} in year ${d["Year"]}`)
                       return tooltip
+                        // .attr("transform", `translate(${d["Country"] + 5},0)` )
+                        .style("pointer-events", "none")
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
                         .style("top", `${event.clientX}px!important`)
                         .style("left",`${event.clientY}px!important`)
-                      .text(`${showName}, Orders: ${showAge}`);
+                        .html(`Country: ${showGroup}<br> Males Life Expectancy:  ${showValue}<br> in the year:  ${d["Year"]}`);
                     })
                     .on("mousemove", function(event){
-                      event = window.event || event; 
-                      // console.log(` X: ${d3.mouse(this)[0]},Y: ${d3.mouse(this)[1]}`)
-                      // console.log(`clientX: ${event.clientX}px, ClientY: ${event.clientY}px`)
+                      event = window.event || event;
                       return tooltip
+                        // .attr("transform", `translate(${1000},0)` )
                         .style("visibility", "visible")
                         .style("position", "absolute!important")
                         .style("left", (d3.mouse(this)[0]-200) + "px")
-                        .style("top",(d3.mouse(this)[1]-20) + "px")
+                        .style("top",(d3.mouse(this)[1]+200) + "px")
                     })
                     .on('mouseout', function() {
-                      // console.log("tooltip mouse out")
-                      d3.select(this).attr('opacity', 1).attr('class', '')
+                      d3.select(this)
+                      .attr('fill', "orange")
                       return tooltip.style("visibility", "hidden");
                       
                     })
-                    // cant call mouseover events after the .transtion
+                    // cant call mouseover events after the .transtion - so move it here:
                     .transition(t)
-                    .attr('height', d => graphHeight - y(d.orders))
-                    .attr('y', d => y(d.orders))
+                    .attr('width', d => x(d["Life Expectancy Male"]))
+                    // .attr('x', 0)
                     
                 // call axes
                 xAxisGroup.call(xAxis);
@@ -155,14 +153,15 @@ export class AppComponent {
 
                 xAxisGroup
                     .selectAll('text')
-                    .attr('transform', 'rotate(-35)')
-                    .attr('text-anchor', 'end');
+                    .style("margin-top", 100)
+                    .attr('transform', 'rotate(-45)')
+                    .attr('text-anchor', 'start');
             };
            
             update1stGraph(this.CustomerData);
         });
 
-        // ========== service fetch another data for HORIZONTAL bar chart =============
+        // ==========@@@@@@@@@@ service fetch another data for HORIZONTAL bar chart @@@@@@@@@@@@=============
         this.mapService.getCutomerStat().subscribe(data => {
             let xdata = data.map(e => {
                 return { ...e.payload.doc.data() };
@@ -189,16 +188,17 @@ export class AppComponent {
                 .attr('width', graphWidth)
                 .attr('height', graphHeight)
                 .attr('transform', `translate( ${margin.left}, ${margin.top})`);
-
+            // set the axis labels
             const xAxisGroup2 = graph2.append('g');
             const yAxisGroup2 = graph2.append('g');
-
+            // labels the y axis
             const y = d3.scaleBand()
               .domain(this.HealthData.map(d => d.name))
               .range([0, 500])
               .paddingInner(0.2)
               .paddingOuter(10)
-              
+
+            // label the x axis 
             const x = d3.scaleLinear()
               .domain([0, max])
               .range([0, graphWidth])
@@ -214,10 +214,6 @@ export class AppComponent {
             // =========== update data ===========
             const update2ndGraph = purple => {
                 purple = '#6B4CD8'
-                // update scales
-                // x.domain(this.HealthData.map(item => item.age))
-                // y.domain(this.HealthData.map(item => item.age));
-
                 // join data
                 const rect = graph2.selectAll('rect').data(this.HealthData);
                 // remove entries when data is updated
@@ -292,21 +288,14 @@ export class AppComponent {
             update2ndGraph(this.HealthData);
         });
 
-        // ========== service fetch another data for HORIZONTAL bar chart =============
+        // ==========@@@@@@@@@@ service fetch another data for HEAT MAP chart @@@@@@@@@@@@=============
         // this.mapService.getCutomerStat().subscribe(data => {
           // let xdata = data.map(e => {
           //     return { ...e.payload.doc.data() };
           // });
-
-          // console.log(xdata);
           d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
             console.log(data)
             this.CustomerData = data;
-          
-          // this.HealthData = xdata;
-          
-
-
           // select svg container
           const svg2 = d3.select('#graphContainer2');
 
@@ -357,8 +346,10 @@ export class AppComponent {
 
                 // Build color scale
                 const myColor = d3.scaleLinear<string>()
-                  .domain([1, 10])
-                  .range(["maroon", "purple"]);
+                  // .domain([1, 40]) // specify the range of the scale typically align this close to the data sets
+                  // .range(["#6A4DD8", "#EFEDFC"]);
+                  .range(["white", "#69b3a2"])
+                  .domain([1,100])
 
                 // select tool tip div
                 const hmToolTip = d3.select("#heatmap-tooltip")
@@ -382,10 +373,10 @@ export class AppComponent {
                 }
                 const mousemove = function(d) {
                   hmToolTip
-                    .html(`${d.variable} has ${d.value} orders with priority level: ${d.group}`)
+                    .html(`Company: ${d.group}, Risk Level: ${d.value} in Release: ${d.variable}`)
                     .style("left", (d3.mouse(this)[0]-200) + "px")
                     .style("top", (d3.mouse(this)[1]+40) + "px")
-                    .style("color", "white")
+                    .style("color", "#6A4DD9")
                 }
                 const mouseleave = function(d) {
                   hmToolTip

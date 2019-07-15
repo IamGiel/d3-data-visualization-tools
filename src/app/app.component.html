@@ -8,25 +8,34 @@
   <hr>
   <br>
   <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div >
-               <!-- Create a div where the graph will take place -->
-               <div id="my_dataviz"></div>
+    <div class="row separator">
+        <div class="col-md-6 inner">
+            <!-- <div class="outer"> -->
+                <!-- <div class="inner">  -->
+                    <div >
+                      <div id="my_dataviz"></div>
+                        <div class="span4" id="LPUgraph">
+                            <!-- <rect>
+                                <text></text>
+                            </rect> -->
+                        </div>
+                    </div>
+                <!-- </div> -->
+            <!-- </div> -->
+            <!-- <div>
+               
                 <svg  id="graphContainer"
-                width="600px"
-                height="600px"
                 class="associations"
                 #graphContainer>
                   <rect>
                       <text></text>
                   </rect>
                 </svg>
-            </div>
+            </div> -->
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 inner">
             <div >
-                <svg  id="graphContainer2"
+                <svg  id="graphContainer2"  style="margin-top: 34px"
                 width="600px"
                 height="600px"
                 class="associations"
@@ -39,8 +48,8 @@
         </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6">
+    <div class="row separator">
+      <div class="col-md-6 inner">
           <div>
               <div id="heatmap-tooltip"></div>
               <svg  id="heat-map"
@@ -54,7 +63,7 @@
               </svg>
           </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6 inner">
           <div>
               <svg  id="heat-map"
               width="600px"
