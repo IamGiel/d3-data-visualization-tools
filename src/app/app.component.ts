@@ -41,13 +41,13 @@ export class AppComponent {
             // const svg = d3.select('#graphContainer');
             const svg = d3.select("#LPUgraph").append("svg");
             //set graph height and width
-            const margin = { top: 100, right: 200, bottom: 100, left: 200 };
+            const margin = { top: 200, right: 200, bottom: 300, left: 200 };
             const graphWidth = margin.right + d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 88) + margin.left;
-            const graphHeight = margin.bottom + d3.max(this.CustomerData, d => d["Country"].length * 250) + margin.top;
+            const graphHeight = margin.bottom + d3.max(this.CustomerData, d => d["Country"].length * 1000) + margin.top;
             console.log(graphHeight)
             // build Graph height and width
             const graph = svg
-                
+                .style("font", "18px times")
                 .attr('width', graphWidth)
                 .attr('height', graphHeight)
                 .append('g')
@@ -62,13 +62,14 @@ export class AppComponent {
               .paddingInner(0.2)
               .paddingOuter(0.5)
 
-              console.log(this.CustomerData.map(d => d["Year"]))
-              console.log(this.CustomerData.map(d => d["Life Expectancy Male"]))
+              // console.log(this.CustomerData.map(d => d["Year"]))
+              // console.log(this.CustomerData.map(d => d["Life Expectancy Male"]))
 
             // label the x axis
             const x = d3.scaleLinear()
               .domain([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"])])
               .range([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 10)]) // going up ascend
+
               console.log(d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
             const xAxis =  d3.axisTop(x).ticks(20).tickFormat((d) => `${d}yrs Life expectancy`)
             const yAxis = d3
@@ -98,6 +99,7 @@ export class AppComponent {
                  
                 rect
                     .attr('height', y.bandwidth)
+                   .style("font", "18px times")
                     .attr('width', 0) // starting height of the bar
                     .attr('y', d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
                     .attr('fill', 'orange')
@@ -105,6 +107,7 @@ export class AppComponent {
                 rect
                     .enter()
                     .append('rect')
+                   .style("font", "18px times")
                     .attr('height', y.bandwidth)
                     .attr('width', 0) // starting height of the bar
                     .attr('y', d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
