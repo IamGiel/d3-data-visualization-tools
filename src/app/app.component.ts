@@ -42,13 +42,13 @@ export class AppComponent {
             const svg = d3.select("#LPUgraph").append("svg");
             //set graph height and width
             const margin = { top: 200, right: 200, bottom: 300, left: 200 };
-            const graphWidth = margin.right + d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 88) + margin.left;
+            // const graphWidth = margin.right + d3.max(this.CustomerData, d => d["Life Expectancy Male"]) + margin.left;
             const graphHeight = margin.bottom + d3.max(this.CustomerData, d => d["Country"].length * 1000) + margin.top;
             console.log(graphHeight)
             // build Graph height and width
             const graph = svg
                 .style("font", "18px times")
-                .attr('width', graphWidth)
+                .attr('width', 1200)
                 .attr('height', graphHeight)
                 .append('g')
                 .attr('transform', `translate( ${margin.left}, ${margin.right})`)
@@ -58,7 +58,7 @@ export class AppComponent {
             // labels the y axis
             const y = d3.scaleBand()
               .domain(this.CustomerData.map(d => d["Country"]))
-              .range([0, graphHeight])
+              .range([0, 10000])
               .paddingInner(0.2)
               .paddingOuter(0.5)
 
