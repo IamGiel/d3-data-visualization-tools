@@ -289,77 +289,6 @@ export class AppComponent {
           .on("mouseleave", mouseleave)
             
           })
-<<<<<<< HEAD
-          // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
-
-          d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data2)=>{ 
-          // d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv").then((data2) => {
-            console.log(data2)
-            let data = data2;
-
-            
-            let max = d3.max(data, function(d){
-              return parseFloat(d["Population Total"])
-            }); // maximum of x and y
-              console.log(max)
-
-            let colorDomainMin = d3.min(data, function(d){
-              let yearString = `${d["Year"]}`;
-              let year = `${yearString.substring(5)}`;
-              return year ? year : "2000";
-            }); // maximum of x and y
-              console.log(colorDomainMin)
-
-            let colorDomainMax = d3.max(data, function(d){
-              return d["Year"].substring(5);
-            }); // maximum of x and y
-              console.log(colorDomainMax)
-
-            // dimensions and margins
-            var margin = {top: 100, right: 40, bottom: 100, left: 60},
-            width = 1200 - margin.left - margin.right,
-            height = 1200 - margin.top - margin.bottom;
-
-            // Pan and zoom
-            var zoom = d3.zoom()
-                .scaleExtent([.1, 50])
-                .extent([[0, 0], [width, height]])
-                .on("zoom", zoomed);
-                // var d1 = [10,5,20,30];
-
-            // var d2 = [
-            // {"id":"1", "value":10},
-            // {"id":"2", "value":5},
-            // {"id":"3", "value":20},
-            // {"id":"4", "value":30}
-            // ];
-            
-            // console.log("min = " + d3.min(d1));
-            // console.log("max = " + d3.max(d1));
-            // console.log("extent = " + d3.extent(d1));
-            // console.log("sort = " + d1.sort(d3.ascending));
-
-            // append the svg object to the body of the page
-            var svg = d3.select("#scatterPlot")
-            .append("svg")
-            .attr("class", "scatterPlotDimension")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .call(zoom)
-            .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
-
-                  // LEGEND
-          // select the svg area
-          // const legendSvg = d3.select("#legend")
-          // Handmade legend
-          // svg.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#4BA15E").attr("transform", "translate(200,-100)")
-          svg.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#A7CDD9").attr("transform", "translate(0,-220)")
-          svg.append("text").attr("x", 220).attr("y", 130).text("Life Expectency (Age)").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
-          svg.append("text").attr("x", 220).attr("y", 160).text("Country Population").style("font-size", "15px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(90)")
-
-=======
 
           // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
 
@@ -417,7 +346,6 @@ export class AppComponent {
           svg.append("text").attr("x", 220).attr("y", 130).text("Male Life Expectency (Age)").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
           svg.append("text").attr("x", -400).attr("y", 30).text("CO2 Emmissions").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(-90)")
 
->>>>>>> 4c3acdc
 
             const spToolTip = d3.select("#scatterTooltip")
             .append("div")
@@ -448,17 +376,11 @@ export class AppComponent {
                 // .attr("class", "tooltip")
                 .style("padding", "5px")
                   .html(`Country: ${country} <br> Recorded Year: ${year}`)
-<<<<<<< HEAD
-                  .style("left", (d3.mouse(this)[0]-450) + "px")
-                  .style("top", (d3.mouse(this)[1]+100) + "px")
-                  .style("color", "black")
-=======
                   // .style("left", (d3.mouse(this)[0]-450) + "px")
                   // .style("top", (d3.mouse(this)[1]+100) + "px")
                   .style("left", (d3.mouse(this)[0]-350) + "px")
                   .style("top", (d3.mouse(this)[1]+160) + "px")
                   .style("color", "white")
->>>>>>> 4c3acdc
               }
               const mousemove = function(d) {
               
@@ -477,11 +399,7 @@ export class AppComponent {
             // create scale objects
             var xScale = d3.scaleLinear()
               .domain([0, 100])
-<<<<<<< HEAD
-              .range([0, 1000]);
-=======
               .range([0, width]);
->>>>>>> 4c3acdc
             var yScale = d3.scaleLinear()
               .domain([0, 1000])
               .range([height, 0]);
@@ -553,172 +471,8 @@ export class AppComponent {
                 .attr('cx', function(d) {return new_xScale(parseInt(d["Life Expectancy Male"]) ? parseInt(d["Life Expectancy Male"]) : 0)})
                 .attr('cy', function(d) {return new_yScale(parseInt(d["CO2 Emissions"]) ? parseInt(d["CO2 Emissions"]) : 0)})
             }
-<<<<<<< HEAD
-
-            // =============================== RidgeLine Plot ================================
-
-            // set the dimensions and margins of the graph
-            var margin = {top: 80, right: 30, bottom: 50, left:110},
-            width = 460 - margin.left - margin.right,
-            height = 10000 + margin.top + margin.bottom;
-
-            // append the svg object to the body of the page
-            var svg = d3.select("#ridgeline")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
-
-            //read data
-            // d3.csv("https://raw.githubusercontent.com/zonination/perceptions/master/probly.csv").then(function(data) {
-              d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then(function(data) {
-
-
-                // Get the different categories and count them
-                let categories = ["Almost Certainly", "Very Good Chance", "We Believe", "Likely", "About Even", "Little Chance", "Chances Are Slight", "Almost No Chance" ]
-                let n = categories.length
-                let max = d3.max(data, function(d) { return +d["Life Expectancy Male"] })
-                let maxCountry = data.map((d)=> d["Country"])
-                let xAxesLabels = d3.extent(data, function(d) { return d["Country"].length })
-                console.log(max)
-                console.log(maxCountry)
-
-                // Compute the mean of each group
-                let allMeans = []
-                for (let i in xAxesLabels){
-                let currentGroup = xAxesLabels[i]
-                let mean = d3.mean(data, function(d) { return +d["Life Expectancy Male"] })
-                
-                allMeans.push(mean)
-                }
-
-                console.log(allMeans)
-
-                // Create a color scale using these means.
-                let myColor = d3.scaleSequential(function(t) {
-                  console.log(t)
-                  return d3.hsl(t * 360, 1, 0.5) + "";
-                })
-                .interpolator(d3.interpolateRainbow)
-                .domain([0,100]);
-               
-
-                // Add X axis
-                let x = d3.scaleLinear()
-                .domain([-1, max])
-                .range([ 0, 900 ]);
-                let xAxis = svg.append("g")
-                .attr("class", "xAxis")
-                .attr("transform", "translate(0," + height + ")")
-                // .attr("transform", "rotate(1)")
-                .call(d3.axisBottom(x).tickValues([0, max]).tickSize(-height) )
-
-                // Add X axis label:
-                svg.append("text")
-                  .attr("text-anchor", "end")
-                  .attr("x", width)
-                  // .attr("y", height + 40)
-                  .attr("y", height + 40)
-                  .text("Probability (%)");
-
-                // Create a Y scale for densities
-                let lifeExp = data.map(d => d["Life Expextancy Male"]).length;
-                console.log(lifeExp)
-                let y = d3.scaleLinear()
-                .domain([0, 0.25])
-                .range([ lifeExp, 0]);
-
-                let countryDomains = d3.scaleBand().domain([`${0}`, d3.max(data, d => d["Life Expectancy Male"])]);
-                console.log(countryDomains)
-
-                // Create the Y axis for names
-                let yName = d3.scaleBand()
-                .domain(data.map(d => d["Country"]))
-                .range([0, 10000])
-                .paddingInner(0.2)
-                .paddingOuter(0.5)
-                svg.append("g")
-                .call(d3.axisLeft(yName).tickSize(0))
-                .select(".domain").remove()
-
-                // Compute kernel density estimation for each column:
-                let kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(100)) // increase this 100 for more accurate density.
-                let allDensity = []
-                for (let i = 0; i < n; i++) {
-                  let key = countryDomains[i]
-                  let density = kde( data.map(function(d){  
-                    //  console.log(d["Country"])
-                     return d["Life Expectancy Male"]; }) )
-                  allDensity.push({key: key, density: density})
-                  // console.log(allDensity)
-                }
-
-                // Add areas
-                let myCurves = svg.selectAll("areas")
-                .data(allDensity)
-                .enter()
-                .append("path")
-                  .attr("class", "myCurves")
-                  .attr("transform", function(d){return("translate(0," + (yName(d.key)-height) +")" )})
-                  .attr("fill", function(d){
-                    let grp = d.key ;
-                    let index = categories.indexOf(grp)
-                    let value = allMeans[index]
-                    return myColor( value  )
-                  })
-                  .datum(function(d){return(d.density)})
-                  .attr("opacity", 0.7)
-                  .attr("stroke", "#000")
-                  .attr("stroke-width", 0.1)
-                  .attr("d",  d3.line()
-                      .curve(d3.curveBasis)
-                      .x(function(d) { return x(0); })
-                      .y(function(d) { return y(d[1]); })
-                  )
-
-                // Animate X axis apparition
-                x.range([ 0, width ]);
-                xAxis
-                .transition()
-                .duration(5000)
-                .call(d3.axisBottom(x).tickValues([0,25, 50, 75, 100]).tickSize(-height) )
-                .select(".domain").remove()
-
-                // Animate densities apparition
-                myCurves
-                .transition()
-                .duration(5000)
-                .attr("d",  d3.line()
-                    .curve(d3.curveBasis)
-                    .x(function(d) { return x(d[0]); })
-                    .y(function(d) { return y(d[1]); })
-                )
-
-            })
-
-            // This is what I need to compute kernel density estimation
-            function kernelDensityEstimator(kernel, X) {
-              return function(V) {
-                return X.map(function(x) {
-                  return [x, d3.mean(V, function(v) { 
-                    return kernel(x -  (-v)); 
-                  })];
-                });
-              };
-            }
-            function kernelEpanechnikov(k) {
-              return function(v) {
-                return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
-              };
-            }
-  })
-}
-=======
           })
     }
->>>>>>> 4c3acdc
 
     handleMouseEventsOn = (d, i, n) => {
         console.log(n[i]);
