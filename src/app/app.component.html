@@ -10,64 +10,72 @@
   <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <div >
-               <!-- Create a div where the graph will take place -->
-               <div id="my_dataviz"></div>
-                <svg  id="graphContainer"
-                width="600px"
-                height="600px"
-                class="associations"
-                #graphContainer>
-                  <rect>
-                      <text></text>
-                  </rect>
-                </svg>
+            <div class="inner">
+              <div id="my_dataviz"></div>
+                <div class="span4" id="LPUgraph">
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div >
-                <svg  id="graphContainer2"
-                width="600px"
-                height="600px"
-                class="associations"
-                #graphContainer>
-                  <rect>
-                      <text></text>
-                  </rect>
-                </svg>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-          <div>
+          </div>
+          <div class="col-md-6 inner">
+            <!-- <div> -->
               <div id="heatmap-tooltip"></div>
+              <!-- Create a div where the graph will take place -->
               <svg  id="heat-map"
-              width="600px"
-              height="600px"
+              width="1400px"
+              height="5100px"
               class="associations"
               #graphContainer>
                 <rect>
                     <text></text>
                 </rect>
               </svg>
+            <!-- </div> -->
           </div>
-      </div>
-      <div class="col-md-6">
-          <div>
-              <svg  id="heat-map"
-              width="600px"
-              height="600px"
-              class="associations"
-              #graphContainer>
-                <rect>
-                    <text></text>
-                </rect>
-              </svg>
-          </div>
-      </div>
     </div>
+    <!-- new row -->
+    <div class="row">
+        <div class="col-md-6">
+<<<<<<< HEAD
+            <div class="innerScatterPLot">
+                <div id="scatterTooltip"></div>
+              <div id="scatterPlot"></div>
+            </div>
+          </div>
+          <div class="col-md-6 inner">
+            <div id="ridgeline">
+            </div>
+=======
+          <div class="innerScatterPLot">
+              <div id="scatterTooltip"></div>
+            <div id="scatterPlot"></div>
+>>>>>>> 4c3acdc
+          </div>
+        </div>
+        <div class="col-md-6 inner">
+          <!-- <div> -->
+            <div id="heatmap-tooltip"></div>
+            <!-- Create a div where the graph will take place -->
+            <svg  id="heat-map"
+            width="1400px"
+            height="5100px"
+            class="associations"
+            #graphContainer>
+              <rect>
+                  <text></text>
+              </rect>
+            </svg>
+          <!-- </div> -->
+        </div>
+    </div>
+    <!-- new row -->
+    <div class="row">
+        <div class="col-md-6">
+          
+        </div>
+        <div class="col-md-6 inner">
+            
+        </div>
+  </div>
   </div>
 </div>
 </div>
