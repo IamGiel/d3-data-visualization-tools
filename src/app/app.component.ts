@@ -289,6 +289,7 @@ export class AppComponent {
           .on("mouseleave", mouseleave)
             
           })
+<<<<<<< HEAD
           // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
 
           d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data2)=>{ 
@@ -358,6 +359,65 @@ export class AppComponent {
           svg.append("text").attr("x", 220).attr("y", 130).text("Life Expectency (Age)").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
           svg.append("text").attr("x", 220).attr("y", 160).text("Country Population").style("font-size", "15px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(90)")
 
+=======
+
+          // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
+
+          d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data2)=>{ 
+          // d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv").then((data2) => {
+            console.log(data2)
+            let data = data2;
+
+            
+            let max = d3.max(data, function(d){
+              return parseFloat(d["Population Total"])
+            }); // maximum of x and y
+              console.log(max)
+
+            let colorDomainMin = d3.min(data, function(d){
+              let yearString = `${d["Year"]}`;
+              let year = `${yearString.substring(5)}`;
+              return year ? year : "2000";
+            }); // maximum of x and y
+              console.log(colorDomainMin)
+
+            let colorDomainMax = d3.max(data, function(d){
+              return d["Year"].substring(5);
+            }); // maximum of x and y
+              console.log(colorDomainMax)
+
+            // dimensions and margins
+            var margin = {top: 100, right: 40, bottom: 100, left: 150},
+            width = 1200 - margin.left - margin.right,
+            height = 1200 - margin.top - margin.bottom;
+
+            // Pan and zoom
+            var zoom = d3.zoom()
+                .scaleExtent([.1, 50])
+                .extent([[0, 0], [width, height]])
+                .on("zoom", zoomed);
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#scatterPlot")
+            .append("svg")
+            .attr("class", "scatterPlotDimension")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .call(zoom)
+            .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+                  // LEGEND
+          // select the svg area
+          // const legendSvg = d3.select("#legend")
+          // Handmade legend
+          // svg.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#4BA15E").attr("transform", "translate(200,-100)")
+          svg.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#A7CDD9").attr("transform", "translate(0,-220)")
+          svg.append("text").attr("x", 220).attr("y", 130).text("Male Life Expectency (Age)").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
+          svg.append("text").attr("x", -400).attr("y", 30).text("CO2 Emmissions").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(-90)")
+
+>>>>>>> 4c3acdc
 
             const spToolTip = d3.select("#scatterTooltip")
             .append("div")
@@ -388,9 +448,17 @@ export class AppComponent {
                 // .attr("class", "tooltip")
                 .style("padding", "5px")
                   .html(`Country: ${country} <br> Recorded Year: ${year}`)
+<<<<<<< HEAD
                   .style("left", (d3.mouse(this)[0]-450) + "px")
                   .style("top", (d3.mouse(this)[1]+100) + "px")
                   .style("color", "black")
+=======
+                  // .style("left", (d3.mouse(this)[0]-450) + "px")
+                  // .style("top", (d3.mouse(this)[1]+100) + "px")
+                  .style("left", (d3.mouse(this)[0]-350) + "px")
+                  .style("top", (d3.mouse(this)[1]+160) + "px")
+                  .style("color", "white")
+>>>>>>> 4c3acdc
               }
               const mousemove = function(d) {
               
@@ -409,7 +477,11 @@ export class AppComponent {
             // create scale objects
             var xScale = d3.scaleLinear()
               .domain([0, 100])
+<<<<<<< HEAD
               .range([0, 1000]);
+=======
+              .range([0, width]);
+>>>>>>> 4c3acdc
             var yScale = d3.scaleLinear()
               .domain([0, 1000])
               .range([height, 0]);
@@ -481,6 +553,7 @@ export class AppComponent {
                 .attr('cx', function(d) {return new_xScale(parseInt(d["Life Expectancy Male"]) ? parseInt(d["Life Expectancy Male"]) : 0)})
                 .attr('cy', function(d) {return new_yScale(parseInt(d["CO2 Emissions"]) ? parseInt(d["CO2 Emissions"]) : 0)})
             }
+<<<<<<< HEAD
 
             // =============================== RidgeLine Plot ================================
 
@@ -642,6 +715,10 @@ export class AppComponent {
             }
   })
 }
+=======
+          })
+    }
+>>>>>>> 4c3acdc
 
     handleMouseEventsOn = (d, i, n) => {
         console.log(n[i]);
