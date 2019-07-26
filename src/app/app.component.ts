@@ -17,6 +17,7 @@ export class AppComponent {
     CustomerData = [];
     HealthData: any[];
     tooltip;
+    
     // data:any = 'https://unpkg.com/us-atlas@1.0.2/us/10m.json';
     @ViewChild('graphContainer') graphContainer: ElementRef;
 
@@ -293,9 +294,11 @@ export class AppComponent {
           // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
 
           d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data2)=>{ 
-          // d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/2_TwoNum.csv").then((data2) => {
             console.log(data2)
             let data = data2;
+            // d3.scaleOrdinal(d3.schemeCategory10)
+            let colorful = d3.scaleOrdinal(d3.schemeCategory10);
+            console.log(colorful)
 
             
             let max = d3.max(data, function(d){
@@ -322,7 +325,7 @@ export class AppComponent {
 
             // Pan and zoom
             var zoom = d3.zoom()
-                .scaleExtent([.1, 50])
+                .scaleExtent([0, 10])
                 .extent([[0, 0], [width, height]])
                 .on("zoom", zoomed);
 
@@ -343,8 +346,8 @@ export class AppComponent {
           // Handmade legend
           // svg.append("circle").attr("cx",200).attr("cy",130).attr("r", 6).style("fill", "#4BA15E").attr("transform", "translate(200,-100)")
           svg.append("circle").attr("cx",200).attr("cy",160).attr("r", 6).style("fill", "#A7CDD9").attr("transform", "translate(0,-220)")
-          svg.append("text").attr("x", 220).attr("y", 130).text("Male Life Expectency (Age)").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
-          svg.append("text").attr("x", -400).attr("y", 30).text("CO2 Emmissions").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(-90)")
+          svg.append("text").attr("x", 220).attr("y", 130).text("Male Life Expectency (Age) fm 2000 - 2012").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(200,-100)")
+          svg.append("text").attr("x", -400).attr("y", 30).text("Population Total fm 2000 - 2012").style("font-size", "20px").attr("alignment-baseline","middle").attr("transform", "translate(-300,100)").attr("transform", "rotate(-90)")
 
 
             const spToolTip = d3.select("#scatterTooltip")
@@ -353,55 +356,56 @@ export class AppComponent {
             .style("position", "relative")
             // .attr("class", "tooltip")
             .style("padding", "5px")
-  
-  
+
               // Three function that change the tooltip when user hover / move / leave a cell
               const mouseover = function(d) {
                 let yearString = `${d["Year"]}`;
                 // let life = d["Country"] ? d["Life Expectancy Male"] : "n/a";
                 let country = `${d["Country"] ? d["Country"] : "n/a"}`;
-                let population = `${d["Population Total"]}`;
+                let Co2Emmissions = `${d["CO2 Emissions"]}`;
                 let year =  `${d["Year"] ? d["Year"] : "n/a"}`;
-                let x = `${d3.mouse(this)[0]}px`;
-                console.log(x)
-                console.log(`Country: ${country}<br> Population: ${population}`)
-                d3.select(this)
-                .style("stroke", "red")
-                .style("fill", "white")
-                .style("opacity", 0.8)
-                .style("cursor", "pointer"); 
+                // let x = `${d3.mouse(this)[0]}px`;
+                // console.log(x)
+                console.log(`Country: ${country}<br> Population: ${Co2Emmissions}`)
                 spToolTip
                 .style("opacity", 1)
                 .style("position", "relative")
                 // .attr("class", "tooltip")
-                .style("padding", "5px")
-                  .html(`Country: ${country} <br> Recorded Year: ${year}`)
+                // .style("padding", "5px")
+                  .html(`Country: ${country} <br> CO2 Emmisions:${Co2Emmissions} rec: ${year}`)
                   // .style("left", (d3.mouse(this)[0]-450) + "px")
                   // .style("top", (d3.mouse(this)[1]+100) + "px")
                   .style("left", (d3.mouse(this)[0]-350) + "px")
                   .style("top", (d3.mouse(this)[1]+160) + "px")
                   .style("color", "white")
+                d3.select(this)
+                .style("stroke", "red")
+                .style("fill", "yellow")
+                .style("opacity", 0.8)
+                // .style("cursor", "pointer"); 
+               
               }
               const mousemove = function(d) {
-              
+                
               }
               const mouseleave = function() {
                 console.log("mouseout")
                 spToolTip
                   .style("opacity", 0)
                 d3.select(this)
-                  .style("stroke", "white")
-                  .style("opacity", 0.8)
-                  .style("fill", "#A694E8")
-                  .style("cursor", "default"); 
+                .transition().duration(1000)
+                .style("fill", `${color}`)
+                .style("opacity", 0.3)
+                .style("pointer-events", "visibleFill")
               }
 
             // create scale objects
             var xScale = d3.scaleLinear()
-              .domain([0, 100])
+              .domain([0, d3.max(data, d => parseInt(d["Life Expectancy Male"]))])
               .range([0, width]);
             var yScale = d3.scaleLinear()
-              .domain([0, 1000])
+              // .domain([0, d3.max(data, d => parseInt(d["Population Total"]))])
+              .domain([0, d3.min(data, d => parseInt(d["Population Total"]))])
               .range([height, 0]);
             // create axis objects
             var xAxis = d3.axisTop(xScale)
@@ -426,21 +430,17 @@ export class AppComponent {
             .attr("y", 0);
 
             // Color scale: give me a specie name, I return a color
-            var color = d3.scaleOrdinal()
-            .domain(["10", "100"])
-            .range([ "white", "pink", "brown", "red", "orange", "purple", "blue", "green", "lightgreen", "lightred", "lightorange", "black"])
-
+            var color =d3.scaleOrdinal([`#383867`, `#584c77`, `#33431e`, `#a36629`, `#92462f`, `#b63e36`, `#b74a70`, `#946943`]);
             // Draw Datapoints
             var points_g = svg.append("g")
               .attr("clip-path", "url(#clip)")
               .attr("width", width)
               .attr("height", height)
-              .style("fill", `${color}`)
+              // .style("fill", "red")
+              .style("fill", "purple")
               .style("pointer-events", "visibleFill")
               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              
               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-              .attr("clip-path", "url(#clip)")
               .classed("points_g", true)
               .call(zoom)
            
@@ -457,7 +457,7 @@ export class AppComponent {
               .style("stroke", `${color}`)
               .style("pointer-events", "visibleFill")
               .on("mouseover", mouseover)
-              .on("mousemove", mousemove)
+              // .on("mousemove", mousemove)
               .on("mouseleave", mouseleave)
 
             function zoomed() {
@@ -472,6 +472,8 @@ export class AppComponent {
                 .attr('cy', function(d) {return new_yScale(parseInt(d["CO2 Emissions"]) ? parseInt(d["CO2 Emissions"]) : 0)})
             }
           })
+
+         
     }
 
     handleMouseEventsOn = (d, i, n) => {
