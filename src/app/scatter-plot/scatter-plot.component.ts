@@ -48,7 +48,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
 
       // Pan and zoom
       var zoom = d3.zoom()
-          .scaleExtent([0, 10])
+          .scaleExtent([0, 30])
           .extent([[0, 0], [width, height]])
           .on("zoom", zoomed);
 
@@ -61,7 +61,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
       .call(zoom)
       .append("g")
       .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+            "translate(50," + margin.top + ")");
 
             // LEGEND
     // select the svg area
@@ -86,16 +86,17 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
           // let life = d["Country"] ? d["Life Expectancy Male"] : "n/a";
           let country = `${d["Country"] ? d["Country"] : "n/a"}`;
           let Co2Emmissions = `${d["CO2 Emissions"]}`;
+          let population = `${d["Population Total"]}`;
           let year =  `${d["Year"] ? d["Year"] : "n/a"}`;
           // let x = `${d3.mouse(this)[0]}px`;
           // console.log(x)
-          console.log(`Country: ${country}<br> Population: ${Co2Emmissions}`)
+          console.log(`Country: ${country}<br> Population: ${population}`)
           spToolTip
           .style("opacity", 1)
           .style("position", "relative")
           // .attr("class", "tooltip")
           // .style("padding", "5px")
-            .html(`Country: ${country} <br> CO2 Emmisions:${Co2Emmissions} rec: ${year}`)
+            .html(`Country: ${country} <br> Population:${population} rec: ${year}`)
             // .style("left", (d3.mouse(this)[0]-450) + "px")
             // .style("top", (d3.mouse(this)[1]+100) + "px")
             .style("left", (d3.mouse(this)[0]-350) + "px")
@@ -124,22 +125,31 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
 
       // create scale objects
       var xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => parseInt(d["Life Expectancy Male"]))])
+        // .domain([0, d3.max(data, d => parseFloat(d["Life Expectancy Male"]))])
+        .domain( d3.extent(data, d => parseFloat(d["Life Expectancy Male"])))
         .range([0, width]);
       var yScale = d3.scaleLinear()
-        // .domain([0, d3.max(data, d => parseInt(d["Population Total"]))])
-        .domain([0, d3.min(data, d => parseInt(d["Population Total"]))])
-        .range([height, 0]);
+        .domain([0, d3.max(data, d => parseFloat(d["Population Total"])/100)])
+        // .domain( d3.extent(data, d => parseFloat(d["Population Total"])))
+        .range( [0, 1000])
+
+        console.log(yScale.domain())
       // create axis objects
       var xAxis = d3.axisTop(xScale)
-        .ticks(20, "s");
+        .ticks(20)
+        .tickSize(-height)
       var yAxis = d3.axisLeft(yScale)
-        .ticks(20, "s");
+        .ticks(50)
+        .tickFormat((d) => `${d}`)
+        .tickSize(-width)
+        
       // Draw Axis
       var gX = svg.append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .call(xAxis);
       var gY = svg.append('g')
+      .attr("height", height)
+        .attr("padding", 1.2)
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .call(yAxis);
 
@@ -161,7 +171,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
         .attr("height", height)
         // .style("fill", "red")
         .style("fill", "purple")
-        .style("pointer-events", "visibleFill")
+        .style("pointer-events", "none")
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .classed("points_g", true)
@@ -172,13 +182,13 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
         console.log(data)
       points = points.enter().append("circle")
         .attr('cx', function(d) {return xScale(parseFloat(d["Life Expectancy Male"]) ? parseFloat(d["Life Expectancy Male"]) : 0)})
-        .attr('cy', function(d) {return yScale(parseInt(d["CO2 Emissions"]) ? parseInt(d["CO2 Emissions"]) : 0)})
+        .attr('cy', function(d) {return yScale(parseFloat(d["CO2 Emissions"]) ? parseFloat(d["CO2 Emissions"]) : 0)})
         .attr('r', 10)
         
         .style("fill", `${color}`)
         .style("opacity", 0.3)
         .style("stroke", `${color}`)
-        .style("pointer-events", "visibleFill")
+        .style("pointer-events", "fill")
         .on("mouseover", mouseover)
         // .on("mousemove", mousemove)
         .on("mouseleave", mouseleave)
@@ -191,8 +201,8 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
           gX.call(xAxis.scale(new_xScale));
           gY.call(yAxis.scale(new_yScale));
           points.data(data)
-          .attr('cx', function(d) {return new_xScale(parseInt(d["Life Expectancy Male"]) ? parseInt(d["Life Expectancy Male"]) : 0)})
-          .attr('cy', function(d) {return new_yScale(parseInt(d["CO2 Emissions"]) ? parseInt(d["CO2 Emissions"]) : 0)})
+          .attr('cx', function(d) {return new_xScale(parseFloat(d["Life Expectancy Male"]) ? parseFloat(d["Life Expectancy Male"]) : 0)})
+          .attr('cy', function(d) {return new_yScale(parseFloat(d["CO2 Emissions"]) ? parseFloat(d["CO2 Emissions"]) : 0)})
       }
     })
   }
