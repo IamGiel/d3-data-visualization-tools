@@ -31,14 +31,14 @@ export class BarChartComponent implements OnInit, AfterContentInit {
             const svg = d3.select("#LPUgraph").append("svg");
             //set graph height and width
             const margin = { top: 200, right: 200, bottom: 300, left: 200 };
-            const graphWidth = 1200;
-            const graphHeight = margin.bottom + d3.max(this.CustomerData, d => d["Country"].length * 1000) + margin.top;
-            console.log(graphHeight)
+            const graphWidth =1200;
+            const graphHeight = data.map( (d)=> d["Country"]);
+            console.log(graphHeight.length)
             // build Graph height and width
             const graph = svg
                 .style("font", "18px times")
                 .attr('width', graphWidth + margin.right)
-                .attr('height', graphHeight)
+                .attr('height', graphHeight.length * 2)
                 .append('g')
                 .attr('transform', `translate( ${margin.left}, ${margin.right})`)
             // set the axis labels
@@ -59,9 +59,10 @@ export class BarChartComponent implements OnInit, AfterContentInit {
               .domain([0, 100])
               // .range([0, d3.max(this.CustomerData, d => d["Life Expectancy Male"] * 10)]) // going up ascend
               .range([0,graphWidth - 400]) // going up ascend
+              .nice();
 
               console.log(d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
-            const xAxis =  d3.axisTop(x).ticks(20).tickFormat((d) => `${d}yrs Life expectancy`)
+            const xAxis =  d3.axisTop(x).ticks(20).tickFormat((d) => `${d}yrs Life expectancy`).tickSize(-10000)
             const yAxis = d3
               .axisLeft(y) // tick labels on y 
 
