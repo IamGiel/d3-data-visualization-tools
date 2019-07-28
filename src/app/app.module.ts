@@ -11,13 +11,15 @@ import { environment, environment2 } from 'src/environments/environment';
 import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-component.component';
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { HeatMapComponent } from './heat-map/heat-map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MyTooltipComponentComponent,
     ScatterPlotComponent,
-    BarChartComponent
+    BarChartComponent,
+    HeatMapComponent
   ],
   imports: [
     BrowserModule,
