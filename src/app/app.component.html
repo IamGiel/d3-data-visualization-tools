@@ -12,14 +12,12 @@
         <div class="col-md-6">
             <div class="inner">
               <div id="my_dataviz"></div>
-                <div class="span4" id="LPUgraph">
-                </div>
+                    <app-bar-chart></app-bar-chart>
             </div>
           </div>
           <div class="col-md-6 inner">
             <!-- <div> -->
               <div id="heatmap-tooltip"></div>
-              <!-- Create a div where the graph will take place -->
               <svg  id="heat-map"
               width="1400px"
               height="5100px"
@@ -29,16 +27,12 @@
                     <text></text>
                 </rect>
               </svg>
-            <!-- </div> -->
           </div>
     </div>
     <!-- new row -->
     <div class="row">
         <div class="col-md-6">
-          <div class="innerScatterPLot">
-              <div id="scatterTooltip"></div>
-            <div id="scatterPlot"></div>
-          </div>
+          <app-scatter-plot></app-scatter-plot>
         </div>
         <div class="col-md-6 inner">
           <h1>PIE CHART</h1>
@@ -48,8 +42,7 @@
           </form>
           <div class="pie">
             <div id="pieChart"></div>
-          <div id="pieChart"></div>
-        </div>
+          </div>
         </div>
     </div>
     <!-- new row -->

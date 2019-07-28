@@ -9,11 +9,15 @@ import { D3TooltipModule, D3TooltipService } from 'ngx-d3-tooltip';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-component.component';
+import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyTooltipComponentComponent
+    MyTooltipComponentComponent,
+    ScatterPlotComponent,
+    BarChartComponent
   ],
   imports: [
     BrowserModule,
