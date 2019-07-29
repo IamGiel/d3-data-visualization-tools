@@ -55,13 +55,13 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
       // append the svg object to the body of the page
       var svg = d3.select("#scatterPlot")
       .append("svg")
-      .attr("class", "scatterPlotDimension")
+      // .attr("class", "scatterPlotDimension")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("height",900)
       .call(zoom)
       .append("g")
       .attr("transform",
-            "translate(50," + margin.top + ")");
+            `translate(${margin.right + 10},${margin.top})`);
 
             // LEGEND
     // select the svg area

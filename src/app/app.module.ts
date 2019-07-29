@@ -12,6 +12,8 @@ import { MyTooltipComponentComponent } from './my-tooltip-component/my-tooltip-c
 import { ScatterPlotComponent } from './scatter-plot/scatter-plot.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { HeatMapComponent } from './heat-map/heat-map.component';
+import { ScatterPlotAnimatedComponent } from './scatter-plot-animated/scatter-plot-animated.component';
+import { DropdownMenuComponent } from './scatter-plot-animated/dropdown-menu/dropdown-menu.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { HeatMapComponent } from './heat-map/heat-map.component';
     MyTooltipComponentComponent,
     ScatterPlotComponent,
     BarChartComponent,
-    HeatMapComponent
+    HeatMapComponent,
+    ScatterPlotAnimatedComponent,
+    DropdownMenuComponent
   ],
   imports: [
     BrowserModule,

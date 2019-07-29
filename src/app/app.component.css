@@ -62,6 +62,13 @@
     overflow: auto;
     margin-bottom: 30px;
   }
+  .inner2 {
+    /* position: relative; */
+    width: 1200px;
+    height: 700px;
+    /* overflow: auto; */
+    margin-bottom: 30px;
+  }
   .innerScatterPLot {
     /* position: relative; */
     width: 1200px;
@@ -69,10 +76,10 @@
     overflow: auto;
     margin-bottom: 30px;
   }
-  .scatterPlotDimension {
+  /* .scatterPlotDimension {
     width: 900px;
     height: 700px;
-  }
+  } */
   .translateThis {
     text-anchor: middle;
     position: relative;
