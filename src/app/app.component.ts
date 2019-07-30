@@ -11,15 +11,6 @@ import { max } from 'd3';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  someDataHere;
-    // importJSON = dataJson;
-    // data = `../d3charts/sample-data.json`;
-    CustomerData = [];
-    HealthData: any[];
-    tooltip;
-    
-    // data:any = 'https://unpkg.com/us-atlas@1.0.2/us/10m.json';
-    @ViewChild('graphContainer') graphContainer: ElementRef;
 
     constructor(
       private mapService: FirebaseService
