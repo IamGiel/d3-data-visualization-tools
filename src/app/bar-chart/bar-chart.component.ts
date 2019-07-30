@@ -24,7 +24,7 @@ export class BarChartComponent implements OnInit, AfterContentInit {
         // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv").then((data)=>{
           d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data)=>{ 
             this.CustomerData = data;
-            console.log(this.CustomerData)
+            // console.log(this.CustomerData)
 
             // select svg container
             // const svg = d3.select('#graphContainer');
@@ -33,7 +33,7 @@ export class BarChartComponent implements OnInit, AfterContentInit {
             const margin = { top: 200, right: 200, bottom: 300, left: 200 };
             const graphWidth =1200;
             const graphHeight = data.map( (d)=> d["Country"]);
-            console.log(graphHeight.length)
+            // console.log(graphHeight.length)
             // build Graph height and width
             const graph = svg
                 .style("font", "18px times")
@@ -61,7 +61,7 @@ export class BarChartComponent implements OnInit, AfterContentInit {
               .range([0,graphWidth - 400]) // going up ascend
               .nice();
 
-              console.log(d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
+              // console.log(d3.max(this.CustomerData, d => d["Life Expectancy Male"]))
             const xAxis =  d3.axisTop(x).ticks(20).tickFormat((d) => `${d}yrs Life expectancy`).tickSize(-10000)
             const yAxis = d3
               .axisLeft(y) // tick labels on y 
@@ -111,7 +111,7 @@ export class BarChartComponent implements OnInit, AfterContentInit {
                       let event:any = window.event; // to get the x and y axis of our cursor
                       let showValue = d["Life Expectancy Male"];
                       let showGroup = d["Country"];
-                      console.log(`${showValue} at ${showGroup} in year ${d["Year"]}`)
+                      // console.log(`${showValue} at ${showGroup} in year ${d["Year"]}`)
                       return tooltip
                         // .attr("transform", `translate(${d["Country"] + 5},0)` )
                         .style("pointer-events", "none")

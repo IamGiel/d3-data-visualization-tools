@@ -1,3 +1,10 @@
-<app-dropdown-menu></app-dropdown-menu>
-<div id="scatterPlotAnimated" width="960" height="450"></div>
+<!-- <app-dropdown-menu [values]=></app-dropdown-menu> -->
+<hr>
+   
+    <app-dropdown-menu id="xColumn" [dataValues]="dropdownValues" (onClick)="emitSomething($event)"></app-dropdown-menu>
+    
+
+<br>
+<hr>
+    <div id="scatterPlotAnimated" width="960" height="450"></div>
 
