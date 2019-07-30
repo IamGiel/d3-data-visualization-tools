@@ -29,7 +29,7 @@ export class HeatMapComponent implements OnInit, AfterContentInit {
                   // Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
                   const yAxes = d3.map(this.data, function(d){return d["Country"];}).keys()
                   const xAxes = d3.map(this.data, function(d){return d["Year"]}).keys()
-                  console.log(xAxes)
+                  // console.log(xAxes)
   
             const margin = { top: 180, right: 100, bottom: 20, left: 200 };
             const graphWidth = yAxes.length*100 + margin.left + margin.right;

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit, Output } from '@angular/core';
 import * as d3 from 'd3';
 
 @Component({
@@ -7,17 +7,31 @@ import * as d3 from 'd3';
   styleUrls: ['./scatter-plot-animated.component.css']
 })
 export class ScatterPlotAnimatedComponent implements OnInit, AfterContentInit {
-  // test = "I LOVE MY TEAM MATES!!!!"
+
+  @Output() emitSomething() {
+    console.log("emitting something")
+  }
+  
+  dropdownValues = [];
+
   constructor() { }
 
   ngOnInit() {
+    d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
+      .then(info => {
+        this.dropdownValues = info;
+      })
   }
+
+  
+
   ngAfterContentInit(){
     
     d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
       .then(info => {
         const data:any = info;
-
+        this.dropdownValues = data.columns;
+        console.log(data.columns)
           // const svg = d3.select('svg');
 
         const svg = d3.select("#scatterPlotAnimated").append("svg");
@@ -26,7 +40,7 @@ export class ScatterPlotAnimatedComponent implements OnInit, AfterContentInit {
         const margin = { top: 200, right: 200, bottom: 300, left: 200 };
         const graphWidth = 1200;
         const graphHeight = data.map((d) => d["Country"]);
-        console.log(graphHeight.length)
+        // console.log(graphHeight.length)
         // build Graph height and width
         const graph = svg
           .style("font", "18px times")

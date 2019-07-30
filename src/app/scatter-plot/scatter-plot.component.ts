@@ -17,29 +17,29 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
      // ==========@@@@@@@@@@ service fetch another data for SCATTER PLOT MAP chart @@@@@@@@@@@@=============
 
      d3.csv("https://iamgiel.github.io/resume/assets/world3.csv").then((data2)=>{ 
-      console.log(data2)
+      // console.log(data2)
       let data = data2;
       // d3.scaleOrdinal(d3.schemeCategory10)
       let colorful = d3.scaleOrdinal(d3.schemeCategory10);
-      console.log(colorful)
+      // console.log(colorful)
 
       
       let max = d3.max(data, function(d){
         return parseFloat(d["Population Total"])
       }); // maximum of x and y
-        console.log(max)
+        // console.log(max)
 
       let colorDomainMin = d3.min(data, function(d){
         let yearString = `${d["Year"]}`;
         let year = `${yearString.substring(5)}`;
         return year ? year : "2000";
       }); // maximum of x and y
-        console.log(colorDomainMin)
+        // console.log(colorDomainMin)
 
       let colorDomainMax = d3.max(data, function(d){
         return d["Year"].substring(5);
       }); // maximum of x and y
-        console.log(colorDomainMax)
+        // console.log(colorDomainMax)
 
       // dimensions and margins
       var margin = {top: 100, right: 40, bottom: 100, left: 150},
@@ -90,7 +90,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
           let year =  `${d["Year"] ? d["Year"] : "n/a"}`;
           // let x = `${d3.mouse(this)[0]}px`;
           // console.log(x)
-          console.log(`Country: ${country}<br> Population: ${population}`)
+          // console.log(`Country: ${country}<br> Population: ${population}`)
           spToolTip
           .style("opacity", 1)
           .style("position", "relative")
@@ -113,7 +113,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
           
         }
         const mouseleave = function() {
-          console.log("mouseout")
+          // console.log("mouseout")
           spToolTip
             .style("opacity", 0)
           d3.select(this)
@@ -133,7 +133,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
         // .domain( d3.extent(data, d => parseFloat(d["Population Total"])))
         .range( [0, 1000])
 
-        console.log(yScale.domain())
+        // console.log(yScale.domain())
       // create axis objects
       var xAxis = d3.axisTop(xScale)
         .ticks(20)
@@ -169,8 +169,8 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
         .attr("clip-path", "url(#clip)")
         .attr("width", width)
         .attr("height", height)
-        // .style("fill", "red")
-        .style("fill", "purple")
+        .style("stroke", "#181818")
+        .style("fill", "#F0C207")
         .style("pointer-events", "none")
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
@@ -179,7 +179,7 @@ export class ScatterPlotComponent implements OnInit, AfterContentInit {
      
       var points = points_g.selectAll("circle")
         .data(data);
-        console.log(data)
+        // console.log(data)
       points = points.enter().append("circle")
         .attr('cx', function(d) {return xScale(parseFloat(d["Life Expectancy Male"]) ? parseFloat(d["Life Expectancy Male"]) : 0)})
         .attr('cy', function(d) {return yScale(parseFloat(d["CO2 Emissions"]) ? parseFloat(d["CO2 Emissions"]) : 0)})
