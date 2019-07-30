@@ -3,7 +3,7 @@ import {FormGroup, FormControl, Validators } from '@angular/forms'
 import * as d3 from 'd3';
 import { dropdown } from  './dropdown';
 import { select } from 'd3';
-
+import { scatterPlot } from './scatter-plot';
 
 
 
@@ -13,11 +13,18 @@ import { select } from 'd3';
   styleUrls: ['./dropdown-menu.component.css'],
   template: 
   `
-  <div id="dropDown"></div>
-    <br>
-      <h3>VS</h3>
-    <br>
-  <div id="dropDown2"></div>
+      <div id="dropDown"></div>
+       
+          <h3>VS</h3>
+      <div id="dropDown2"></div>
+
+      <hr>
+
+       <svg id="animateDots" width="960" height="450"></svg>
+
+    
+   
+    
   `
 })
 
@@ -25,50 +32,95 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit {
 
   @Input() dataValues;
   @Output() onChange = new EventEmitter()
+
+  xColumn;
+  yColumn;
+  
   constructor() {}
 
-  ngOnInit() { 
+  ngOnInit() {
 
-    let data;
-    let xColumn;
-    let yColumn;
+    d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
+      .then(data => {
 
-    const onXColumnClicked = column => {
-      xColumn = column;
-      // render();
-    };
-
-    const onYColumnClicked = column => {
-      yColumn = column;
-      // render();
-    };
-
-    this.render()
-   
+      this.xColumn = data.columns[4];
+      this.yColumn = data.columns[0];
+      })
+  
+  
   }
 
   render(){
+
+
+    const svg = select('#animateDots');
+    const width = +svg.attr('width');
+    const height = +svg.attr('height');
+    let data;
+
     d3.csv('https://vizhub.com/curran/datasets/auto-mpg.csv')
-      .then(info => {
-        this.dataValues = info;
+      .then(loadedData => {
+        data = loadedData;
+        this.dataValues = loadedData;
+
+
+        data.forEach(d => {
+          d.mpg = +d.mpg;
+          d.cylinders = +d.cylinders;
+          d.displacement = +d.displacement;
+          d.horsepower = +d.horsepower;
+          d.weight = +d.weight;
+          d.acceleration = +d.acceleration;
+          d.year = +d.year;
+        });
+        
 
         select('#dropDown').call(dropdown, {
           options: this.dataValues.columns,
-          onOptionsClicked: column => {
-            console.log(column)
-          }
+          onOptionsClicked: this.onXColumnClicked
         })
 
         select('#dropDown2').call(dropdown, {
           options: this.dataValues.columns,
-          onOptionsClicked: column => {
-            console.log(column)
-          }
+          onOptionsClicked: this.onYColumnClicked
         })
+
+        svg.call(scatterPlot, {
+          xValue: d => d[this.xColumn],
+          xAxisLabel: this.xColumn,
+          yValue: d => d[this.yColumn],
+          circleRadius: 10,
+          yAxisLabel: this.yColumn,
+          margin: { top: 10, right: 40, bottom: 88, left: 150 },
+          width,
+          height,
+          data
+        });
+
+
+
+       
+       
+
+        
       })
   }
 
-  ngAfterContentInit(){}
+  onXColumnClicked = column => {
+    console.log(column)
+    this.xColumn = column;
+    this.render();
+  };
+
+  onYColumnClicked = column => {
+    console.log(column)
+    this.yColumn = column;
+    this.render();
+  };
+
+  ngAfterContentInit(){
+    this.render()
+  }
 
 
 

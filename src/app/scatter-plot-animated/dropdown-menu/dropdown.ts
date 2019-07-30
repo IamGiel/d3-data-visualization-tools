@@ -4,7 +4,7 @@ export const dropdown = (selection, props) => {
         onOptionsClicked
      } = props;
 
-    console.log("options from dropdown.ts ",options)
+    // console.log("options from dropdown.ts ",options)
 
     let select = selection
                 .selectAll('select')
